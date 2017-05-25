@@ -1,0 +1,57 @@
+CREATE OR REPLACE FUNCTION findSum(z VARCHAR2)
+RETURN VARCHAR2 IS
+z number := n;
+ RESULTADO VARCHAR2(4000);
+ errorexcetion EXCEPTION;
+ --VALOR NUMBER;
+BEGIN
+    IF z >= 1 and z <=99999 THEN 
+      RAISE errorexcetion;
+    ELSE 
+       if MOD(Z,5) = 0 then
+    RESULTADO := Z;
+      --DBMS_OUTPUT.PUT_LINE('es multiplo de 5 : '|| z );	
+		end if; 
+   if MOD(Z,3) = 0 then
+    RESULTADO := Z;
+      --DBMS_OUTPUT.PUT_LINE('es multiplo de 3 : '|| z );		
+		end if;
+           
+  END IF;
+  
+ RETURN RESULTADO;
+  EXCEPTION
+    WHEN errorexcetion THEN
+    DBMS_OUTPUT.PUT_LINE('en NUMERO  z DEBE SER MAYOR A CERO Y MENOR DE 99999');
+END;
+  
+  ----cramos la tabla
+  
+CREATE TABLE SUMS(
+  ID INT,
+  base_value  varchar2(5) NOT null,
+  result varchar2(4000) NOT NULL
+);
+ 
+ CREATE SEQUENCE SUMS_SEQUENCE 
+  START WITH 1
+  INCREMENT BY 1;
+  
+COMMIT;
+---creamos el trigger
+
+CREATE OR REPLACE TRIGGER TR_INSERTAR
+BEFORE INSERT ON SUMS
+FOR EACH ROW
+BEGIN
+    :NEW.RESULT:=findSum(:new.base_value);
+END;
+
+INSERT INTO SUMS(ID,base_value) VALUES(SUMS_SEQUENCE.NEXTVAL,'1*0');
+
+
+
+
+
+
+ 
